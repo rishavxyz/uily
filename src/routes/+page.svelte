@@ -6,23 +6,31 @@
 
 <section class="p-5">
 	<ul class="grid gap-5">
-		{#each data.results as result}
+		{#each data.results as { metadata, created_at, slug, id, title } (id)}
+			{@const file = metadata.files[0]}
 			<li class="card bg-base-200 max-w-sm">
-				<div class="card-body">
-					<p class="card-title font-serif">{result.properties.Name.title[0].plain_text}</p>
-					<p class="opacity-75">{result.properties.Description.rich_text[0].plain_text}</p>
-					<Carousel>
+				<a href="/theme/{slug}" class="card-body">
+					<div class="flex items-center justify-between text-xs opacity-75">
+						<span class="hover:underline">{metadata.author.title}</span>
+						<span>{new Date(created_at).toLocaleDateString()}</span>
+					</div>
+					<p class="card-title font-serif">{title}</p>
+					<p class="text-balance opacity-75">{@html metadata.description}</p>
+					<Carousel class="mt-3">
 						<CarouselContent>
-							{#each result.properties.Thumbnails.files as file}
-								<CarouselItem class="card">
-									<AspectRatio.Root ratio={2 / 3}>
-										<img src={file.file.url} alt="" class="size-full object-cover" />
-									</AspectRatio.Root>
-								</CarouselItem>
-							{/each}
+							<CarouselItem class="card">
+								<AspectRatio.Root ratio={2 / 3}>
+									<img src={file.home_screen.imgix_url} alt="" class="size-full object-cover" />
+								</AspectRatio.Root>
+							</CarouselItem>
+							<CarouselItem class="card">
+								<AspectRatio.Root ratio={2 / 3}>
+									<img src={file.lock_screen.imgix_url} alt="" class="size-full object-cover" />
+								</AspectRatio.Root>
+							</CarouselItem>
 						</CarouselContent>
 					</Carousel>
-				</div>
+				</a>
 			</li>
 		{/each}
 	</ul>

@@ -3,6 +3,7 @@
 import { COSMIC_BUCKET_SLUG, COSMIC_READ_KEY } from '$env/static/private'
 import type { Result } from '$lib/types/result'
 import { createBucketClient } from '@cosmicjs/sdk'
+import type { PageServerLoad } from './$types'
 
 const cosmic = createBucketClient({
 	bucketSlug: COSMIC_BUCKET_SLUG,
@@ -26,15 +27,16 @@ const props = `{
 	}
 }`
 
-export const load = async () => {
-	const { objects } = await cosmic.objects
-		.find({
-			type: 'thumbnails'
+export const load: PageServerLoad = async ({ params }) => {
+	const { object } = await cosmic.objects
+		.findOne({
+			type: 'thumbnails',
+			slug: params.slug
 		})
 		.props(props)
 		.depth(1)
 
 	return {
-		results: objects as Result[]
+		result: object as Result
 	}
 }

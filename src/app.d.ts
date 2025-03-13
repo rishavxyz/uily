@@ -10,13 +10,17 @@ declare global {
 	}
 	namespace NodeJS {
 		interface ProcessEnv {
-			NOTION_SECRET: string;
-			DATABASE_ID: string;
-			NEXT_PUBLIC_IK_PUBLIC_KEY: string;
-			NEXT_PUBLIC_IK_URL_ENDPOINT: string;
-			IK_PRIVATE_KEY: string;
+			NOTION_SECRET: string
+			DATABASE_ID: string
+
+			IK_PUBLIC_KEY: string
+			IK_URL_ENDPOINT: string
+			IK_PRIVATE_KEY: string
+
+			COSMIC_BUCKET_SLUG: string
+			COSMIC_READ_KEY: string
 		}
 	}
 }
 
-export {};
+export {}

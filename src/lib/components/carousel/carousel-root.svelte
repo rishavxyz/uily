@@ -2,11 +2,29 @@
 	import { cn } from '$lib/utils'
 	import emblaCarouselSvelte from 'embla-carousel-svelte'
 	import type { Snippet } from 'svelte'
+
+	let api = $state()
+	let current = $state(0)
+
+	// TODO: Add type support by installing `embla carousel`
+	function onInit(e: { detail: unknown }) {
+		api = e.detail
+		api.on('slidesInView', () => {
+			current = api.slidesInView()[0]
+		})
+	}
 	type Props = {
 		children: Snippet
 		class?: string
+		currentSlide?: (n: number) => void
 	}
-	let { children, class: cls }: Props = $props()
+	let { children, class: cls, currentSlide }: Props = $props()
+
+	$effect(() => {
+		if (currentSlide) currentSlide(current)
+	})
 </script>
 
-<div class={cn('overflow-hidden', cls)} use:emblaCarouselSvelte>{@render children()}</div>
+<div class={cn('overflow-hidden', cls)} use:emblaCarouselSvelte onemblaInit={onInit}>
+	{@render children()}
+</div>
