@@ -20,12 +20,12 @@
 						<CarouselContent>
 							<CarouselItem class="card">
 								<AspectRatio.Root ratio={2 / 3}>
-									<img src={file.home_screen.imgix_url} alt="" class="size-full object-cover" />
+									<img src={file.lock_screen.imgix_url} alt="" class="size-full object-cover" />
 								</AspectRatio.Root>
 							</CarouselItem>
 							<CarouselItem class="card">
 								<AspectRatio.Root ratio={2 / 3}>
-									<img src={file.lock_screen.imgix_url} alt="" class="size-full object-cover" />
+									<img src={file.home_screen.imgix_url} alt="" class="size-full object-cover" />
 								</AspectRatio.Root>
 							</CarouselItem>
 						</CarouselContent>

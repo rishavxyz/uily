@@ -19,6 +19,11 @@ declare global {
 
 			COSMIC_BUCKET_SLUG: string
 			COSMIC_READ_KEY: string
+
+			REDIS_HOST: string
+			REDIS_PORT: string
+			REDIS_USERNAME: string
+			REDIS_PASSWORD: string
 		}
 	}
 }

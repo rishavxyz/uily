@@ -1,40 +1,38 @@
 // export const prerender = false
 
-import { COSMIC_BUCKET_SLUG, COSMIC_READ_KEY } from '$env/static/private'
+import db, { props } from '$lib/db'
+import { client } from '$lib/db/redis'
 import type { Result } from '$lib/types/result'
-import { createBucketClient } from '@cosmicjs/sdk'
 
-const cosmic = createBucketClient({
-	bucketSlug: COSMIC_BUCKET_SLUG,
-	readKey: COSMIC_READ_KEY
-})
+const key = 'thumbnails'
+const redis = await client()
 
-const props = `{
-	id
-	slug
-	title
-	created_at
-	metadata {
-		author {
-			id
-			slug
-			title
+export const load = async ({ setHeaders }) => {
+	redis.on('error', (err) => console.error(`Redis error:`, err))
+
+	const cache = await redis.get(key)
+
+	if (!cache) {
+		console.log(`cache miss`)
+
+		const { objects } = await db.objects
+			.find({
+				type: key
+			})
+			.props(props)
+			.depth(1)
+		redis.set(key, JSON.stringify(objects))
+
+		return {
+			results: objects as Result[]
 		}
-		description
-		color
-		files
 	}
-}`
+	console.log(`cache hit`)
 
-export const load = async () => {
-	const { objects } = await cosmic.objects
-		.find({
-			type: 'thumbnails'
-		})
-		.props(props)
-		.depth(1)
+	const ttl = await redis.ttl(key)
+	setHeaders({ 'cache-control': `max-age=${ttl}` })
 
 	return {
-		results: objects as Result[]
+		results: JSON.parse(cache) as Result[]
 	}
 }
