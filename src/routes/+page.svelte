@@ -1,35 +1,22 @@
 <script lang="ts">
-	import { Carousel, CarouselContent, CarouselItem } from '$lib/components/carousel'
 	import { AspectRatio } from 'bits-ui'
 	const { data } = $props()
 </script>
 
 <section class="p-5">
 	<ul class="grid gap-5">
-		{#each data.results as { metadata, created_at, slug, id, title } (id)}
-			{@const file = metadata.files[0]}
+		{#each data.results as { metadata, slug, title, thumbnail } (slug)}
 			<li class="card bg-base-200 max-w-sm">
-				<a href="/theme/{slug}" class="card-body">
-					<div class="text-muted flex items-center justify-between text-xs">
-						<span class="hover:underline">{metadata.author.title}</span>
-						<span>{new Date(created_at).toLocaleDateString()}</span>
-					</div>
-					<p class="card-title font-serif">{title}</p>
-					<p class="text-muted text-balance">{@html metadata.description}</p>
-					<Carousel class="mt-3">
-						<CarouselContent>
-							<CarouselItem class="card">
-								<AspectRatio.Root ratio={2 / 3}>
-									<img src={file.lock_screen.imgix_url} alt="" class="size-full object-cover" />
-								</AspectRatio.Root>
-							</CarouselItem>
-							<CarouselItem class="card">
-								<AspectRatio.Root ratio={2 / 3}>
-									<img src={file.home_screen.imgix_url} alt="" class="size-full object-cover" />
-								</AspectRatio.Root>
-							</CarouselItem>
-						</CarouselContent>
-					</Carousel>
+				<a href="/theme/{slug}">
+					<header class="card overflow-clip">
+						<AspectRatio.Root ratio={2 / 3}>
+							<img src={thumbnail} alt="" class="size-full object-cover" />
+						</AspectRatio.Root>
+					</header>
+					<footer class="card-body">
+						<p class="card-title font-serif">{title}</p>
+						<p class="text-muted text-balance">{@html metadata.description}</p>
+					</footer>
 				</a>
 			</li>
 		{/each}

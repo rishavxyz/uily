@@ -55,83 +55,92 @@
 	</a>
 </nav>
 
-<main class="p-5">
-	<div class="grid max-w-sm gap-5">
-		<h1 class="card-title font-serif text-2xl">{result.title}</h1>
+<main class="mx-auto grid max-w-sm gap-5 p-5">
+	<h1 class="card-title font-serif text-2xl">{result.title}</h1>
 
-		<Carousel currentSlide={(n) => (current = n)}>
-			<CarouselContent>
-				<CarouselItem class="card ">
-					<AspectRatio.Root ratio={2 / 3}>
-						<img src={file.lock_screen.imgix_url} alt="" class="size-full object-cover" />
+	<Carousel currentSlide={(n) => (current = n)}>
+		<CarouselContent>
+			<CarouselItem class="card">
+				<div style="background-color:{backgroundColor};">
+					<AspectRatio.Root ratio={9 / 18}>
+						<img src={file.lock_screen.imgix_url} alt="" class="size-full object-contain" />
 					</AspectRatio.Root>
-				</CarouselItem>
-				<CarouselItem class="card">
-					<AspectRatio.Root ratio={2 / 3}>
-						<img src={file.home_screen.imgix_url} alt="" class="size-full object-cover" />
-					</AspectRatio.Root>
-				</CarouselItem>
-			</CarouselContent>
-			<div class="mt-4 flex justify-center gap-1.5">
-				<span class="font-semibold" class:text-muted={current}>Lock screen</span>
-				<span class="opacity-30">/</span>
-				<span class="font-semibold" class:text-muted={!current}>Home screen</span>
-			</div>
-		</Carousel>
-
-		<section class="flex flex-wrap justify-between gap-1">
-			<div class="grid gap-1">
-				<p class="font-medium tracking-wide">
-					<a href="#/" class="link dark:link-primary">{result.metadata.author.title}</a>
-				</p>
-				<time class="text-muted text-sm" datetime={result.created_at}>Created {date}</time>
-			</div>
-
-			<div
-				class={cn(
-					'card border-neutral card-xs w-16 border',
-					liked ? 'bg-secondary/[.2]' : 'bg-base-200'
-				)}
-			>
-				<div class="card-body flex-row items-center justify-center gap-1">
-					<button
-						class={cn(
-							'scale-3d transition-transform will-change-transform',
-							'size-7 cursor-pointer duration-200 ease-out',
-							'hover:scale-200 active:scale-125'
-						)}
-						onclick={() => {
-							liked = !liked
-							liked ? likes++ : likes--
-						}}
-					>
-						<img
-							alt=""
-							src={reaction.src}
-							loading="lazy"
-							draggable="false"
-							class="block size-full object-cover"
-							oncontextmenu={(e) => e.preventDefault()}
-						/>
-					</button>
-					<span class="flex-1 text-lg">{likes}</span>
 				</div>
-			</div>
-		</section>
+			</CarouselItem>
+			<CarouselItem class="card">
+				<div style="background-color:{backgroundColor};">
+					<AspectRatio.Root ratio={9 / 18}>
+						<img src={file.home_screen.imgix_url} alt="" class="size-full object-contain" />
+					</AspectRatio.Root>
+				</div>
+			</CarouselItem>
+		</CarouselContent>
+		<div class="mt-4 flex justify-center gap-1.5">
+			<span class="font-semibold" class:text-muted={current}>Lock screen</span>
+			<span class="opacity-30">/</span>
+			<span class="font-semibold" class:text-muted={!current}>Home screen</span>
+		</div>
+	</Carousel>
 
-		<div class="card border-neutral bg-base-100 max-w-sm border">
-			<div class="card-body">
-				<p class="card-title font-serif">Requirments</p>
-				<ul class="space-y-2">
-					{#each result.metadata.requirments as { requirment }}
-						<li class="">- {requirment}</li>
-					{:else}
-						<li>No requirment needed</li>
-					{/each}
-				</ul>
+	<section class="flex flex-wrap justify-between gap-1">
+		<div class="grid gap-1">
+			<p class="font-medium tracking-wide">
+				<a href="#/" class="link dark:link-primary">{result.metadata.author.title}</a>
+			</p>
+			<time class="text-muted text-sm" datetime={result.created_at}>Created {date}</time>
+		</div>
+
+		<div
+			class={cn(
+				'card border-neutral card-xs w-16 border',
+				liked ? 'bg-secondary/[.2]' : 'bg-base-200'
+			)}
+		>
+			<div class="card-body flex-row items-center justify-center gap-1">
+				<button
+					class={cn(
+						'scale-3d transition-transform will-change-transform',
+						'size-7 cursor-pointer duration-200 ease-out',
+						'hover:scale-200 active:scale-125'
+					)}
+					onclick={() => {
+						liked = !liked
+						liked ? likes++ : likes--
+					}}
+				>
+					<img
+						alt=""
+						src={reaction.src}
+						loading="lazy"
+						draggable="false"
+						class="block size-full object-cover"
+						oncontextmenu={(e) => e.preventDefault()}
+					/>
+				</button>
+				<span class="flex-1 text-lg">{likes}</span>
 			</div>
 		</div>
-	</div>
+	</section>
+
+	<section class="space-y-4">
+		<p class="font-serif text-xl font-medium">Steps to create</p>
+		<ol class="space-y-4">
+			{#each result.metadata.requirments as { requirment }, i}
+				<li class=""><span class="text-muted">{i + 1}&period;</span> {requirment}</li>
+			{:else}
+				<li>No steps provided &colon;&lpar;</li>
+			{/each}
+		</ol>
+	</section>
+
+	{#if result.metadata.comment}
+		<div class="card border-neutral bg-base-100 max-w-sm border">
+			<div class="card-body">
+				<h2 class="font-serif text-xl">Comments</h2>
+				<article class="prose">{@html result.metadata.comment}</article>
+			</div>
+		</div>
+	{/if}
 </main>
 
 <div

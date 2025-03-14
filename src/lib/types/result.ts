@@ -3,16 +3,17 @@ export interface Result {
 	slug: string
 	title: string
 	created_at: string
+	thumbnail: string
 	metadata: Metadata
 }
 
 export interface Metadata {
-	description: string
+	description: string | null
 	author: Author
-	color: string
 	category: Category
 	files: File[]
 	likes: number
+	comment: string | null
 	requirments: Requirment[]
 }
 
