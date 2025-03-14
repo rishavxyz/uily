@@ -17,7 +17,10 @@ export const props = `{
 			slug
 			title
 		}
+	requirments
     description
     color
     files
 }`
+
+export const key = 'posts'

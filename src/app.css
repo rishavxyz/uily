@@ -81,6 +81,8 @@
 	--font-sans: 'Inter Variable', 'sans-serif';
 	--font-mono: 'IBM Plex Mono', 'monospace';
 	--font-serif: 'Prata', serif;
+
+	--color-muted: var(--color-zinc-500);
 }
 
 /* EMBLA JS */

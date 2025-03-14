@@ -12,6 +12,8 @@ export interface Metadata {
 	color: string
 	category: Category
 	files: File[]
+	likes: number
+	requirments: Requirment[]
 }
 
 export interface Author {
@@ -33,16 +35,15 @@ export interface Category {
 }
 
 export interface File {
-	home_screen: HomeScreen
-	lock_screen: LockScreen
+	home_screen: ImageSources
+	lock_screen: ImageSources
 }
 
-export interface HomeScreen {
+export interface ImageSources {
 	url: string
 	imgix_url: string
 }
 
-export interface LockScreen {
-	url: string
-	imgix_url: string
+export interface Requirment {
+	requirment: string
 }

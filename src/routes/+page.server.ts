@@ -1,27 +1,26 @@
 // export const prerender = false
 
-import db, { props } from '$lib/db'
+import db, { objectKey, props } from '$lib/db'
 import { client } from '$lib/db/redis'
 import type { Result } from '$lib/types/result'
 
-const key = 'thumbnails'
 const redis = await client()
 
 export const load = async ({ setHeaders }) => {
 	redis.on('error', (err) => console.error(`Redis error:`, err))
 
-	const cache = await redis.get(key)
+	const cache = await redis.get(objectKey)
 
 	if (!cache) {
 		console.log(`cache miss`)
 
 		const { objects } = await db.objects
 			.find({
-				type: key
+				type: objectKey
 			})
 			.props(props)
 			.depth(1)
-		redis.set(key, JSON.stringify(objects))
+		redis.set(objectKey, JSON.stringify(objects))
 
 		return {
 			results: objects as Result[]
@@ -29,7 +28,7 @@ export const load = async ({ setHeaders }) => {
 	}
 	console.log(`cache hit`)
 
-	const ttl = await redis.ttl(key)
+	const ttl = await redis.ttl(objectKey)
 	setHeaders({ 'cache-control': `max-age=${ttl}` })
 
 	return {

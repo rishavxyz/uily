@@ -6,6 +6,8 @@
 	import { Vibrant, WorkerPipeline } from 'node-vibrant/worker'
 	import Pipeline from 'node-vibrant/worker.worker?worker'
 	import { cn } from '$lib/utils'
+	import moment from 'moment'
+	import { MediaQuery } from 'svelte/reactivity'
 
 	type Props = {
 		data: { result: Result }
@@ -14,8 +16,12 @@
 	const { result } = data
 	const file = result.metadata.files[0]
 
+	const isDarkMode = new MediaQuery('(prefers-color-scheme:dark)')
+
 	let current = $state(0)
 	let backgroundColor = $state('transparent')
+	let likes = $state(result.metadata.likes ?? Math.floor(Math.random() * 9))
+	let liked = $state(false)
 
 	function extractColors(src: string) {
 		Vibrant.use(new WorkerPipeline(Pipeline as never))
@@ -26,16 +32,21 @@
 		img.onload = async () => {
 			const builder = Vibrant.from(img)
 			const colors = await builder.getPalette()
-			backgroundColor = colors.DarkVibrant?.hex ?? 'transparent'
+			backgroundColor =
+				colors[isDarkMode.current ? 'DarkVibrant' : 'LightVibrant']?.hex ?? 'transparent'
 		}
 	}
 
 	$effect(() => {
 		extractColors(file.lock_screen.imgix_url)
 	})
+	const imgUrl = (s: TemplateStringsArray) => '/emoticons/' + s.join('/')
+	const date = moment(result.created_at).fromNow()
+	const reaction = {
+		name: 'Like',
+		src: imgUrl`OK hand.png`
+	}
 </script>
-
-<div></div>
 
 <nav class="sticky top-0 isolate z-[100] p-5">
 	<a href="/" class="btn btn-outline backdrop-blur-md">
@@ -50,7 +61,7 @@
 
 		<Carousel currentSlide={(n) => (current = n)}>
 			<CarouselContent>
-				<CarouselItem class="card">
+				<CarouselItem class="card ">
 					<AspectRatio.Root ratio={2 / 3}>
 						<img src={file.lock_screen.imgix_url} alt="" class="size-full object-cover" />
 					</AspectRatio.Root>
@@ -62,38 +73,79 @@
 				</CarouselItem>
 			</CarouselContent>
 			<div class="mt-4 flex justify-center gap-1.5">
-				<span class="font-semibold" class:opacity-45={current}>Lock screen</span>
+				<span class="font-semibold" class:text-muted={current}>Lock screen</span>
 				<span class="opacity-30">/</span>
-				<span class="font-semibold" class:opacity-45={!current}>Home screen</span>
+				<span class="font-semibold" class:text-muted={!current}>Home screen</span>
 			</div>
 		</Carousel>
+
+		<section class="flex flex-wrap justify-between gap-1">
+			<div class="grid gap-1">
+				<p class="font-medium tracking-wide">
+					<a href="#/" class="link dark:link-primary">{result.metadata.author.title}</a>
+				</p>
+				<time class="text-muted text-sm" datetime={result.created_at}>Created {date}</time>
+			</div>
+
+			<div
+				class={cn(
+					'card border-neutral card-xs w-16 border',
+					liked ? 'bg-secondary/[.2]' : 'bg-base-200'
+				)}
+			>
+				<div class="card-body flex-row items-center justify-center gap-1">
+					<button
+						class={cn(
+							'scale-3d transition-transform will-change-transform',
+							'size-7 cursor-pointer duration-200 ease-out',
+							'hover:scale-200 active:scale-125'
+						)}
+						onclick={() => {
+							liked = !liked
+							liked ? likes++ : likes--
+						}}
+					>
+						<img
+							alt=""
+							src={reaction.src}
+							loading="lazy"
+							draggable="false"
+							class="block size-full object-cover"
+							oncontextmenu={(e) => e.preventDefault()}
+						/>
+					</button>
+					<span class="flex-1 text-lg">{likes}</span>
+				</div>
+			</div>
+		</section>
 
 		<div class="card border-neutral bg-base-100 max-w-sm border">
 			<div class="card-body">
 				<p class="card-title font-serif">Requirments</p>
-				<article class="text-base">
-					{@html result.metadata.description}
-				</article>
+				<ul class="space-y-2">
+					{#each result.metadata.requirments as { requirment }}
+						<li class="">- {requirment}</li>
+					{:else}
+						<li>No requirment needed</li>
+					{/each}
+				</ul>
 			</div>
-		</div>
-		<div class="grid gap-1 text-sm opacity-75">
-			<p>Created by <a href="#/" class="hover:underline">{result.metadata.author.title}</a></p>
-			<time datetime={result.created_at}
-				>Created at {new Date(result.created_at).toLocaleDateString()}</time
-			>
 		</div>
 	</div>
 </main>
 
 <div
-	class={cn('absolute inset-0 bottom-20', 'isolate z-[-1] transition-transform')}
 	id="gradient-bg"
-	style="--bg-color:{backgroundColor};"
+	class="absolute inset-0 bottom-20 isolate z-[-1] transition-transform"
+	style="
+		--color: {backgroundColor};
+		--opacity: {isDarkMode.current ? 62 : 100}%;
+	"
 ></div>
 
 <style>
 	#gradient-bg {
-		--from: color-mix(in oklab, var(--bg-color) 68%, transparent);
+		--from: color-mix(in oklab, var(--color) var(--opacity), transparent);
 		background-image: linear-gradient(180deg, var(--from), transparent);
 		filter: blur(12px);
 		transform-origin: top;

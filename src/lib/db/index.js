@@ -1,3 +1,3 @@
-import { cosmic, props } from './cosmic'
+import { cosmic, props, key as objectKey } from './cosmic'
 export default cosmic
-export { props }
+export { props, objectKey }

@@ -10,12 +10,12 @@
 			{@const file = metadata.files[0]}
 			<li class="card bg-base-200 max-w-sm">
 				<a href="/theme/{slug}" class="card-body">
-					<div class="flex items-center justify-between text-xs opacity-75">
+					<div class="text-muted flex items-center justify-between text-xs">
 						<span class="hover:underline">{metadata.author.title}</span>
 						<span>{new Date(created_at).toLocaleDateString()}</span>
 					</div>
 					<p class="card-title font-serif">{title}</p>
-					<p class="text-balance opacity-75">{@html metadata.description}</p>
+					<p class="text-muted text-balance">{@html metadata.description}</p>
 					<Carousel class="mt-3">
 						<CarouselContent>
 							<CarouselItem class="card">
