@@ -3,14 +3,17 @@ import type { SystemTheme } from '$lib/types/theme.js'
 import type { Result } from '$lib/types/result'
 
 const props = `{
-  slug
-  title
-  created_at
-  metadata {
-    description
-  }
-  type
-  thumbnail
+	slug
+	title
+	created_at
+	thumbnail
+	metadata {
+		categories {
+			slug
+			title
+		}
+		dominant_color
+	}
 }`
 
 export const actions = {

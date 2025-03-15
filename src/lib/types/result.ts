@@ -3,18 +3,19 @@ export interface Result {
 	slug: string
 	title: string
 	created_at: string
-	thumbnail: string
+	thumbnail: string | null
 	metadata: Metadata
 }
 
 export interface Metadata {
 	description: string | null
 	author: Author
-	category: Category
-	files: File[]
-	likes: number
+	categories: Category[]
+	screenshots: Screenshot[]
+	likes_count: number
+	dominant_color: string
 	notes: string | null
-	requirments: Requirment[]
+	steps_to_recreate: string | null
 }
 
 export interface Author {
@@ -31,17 +32,23 @@ export interface AuthorMetadata {
 }
 
 export interface Category {
-	key: string
-	value: string
+	id: string
+	slug: string
+	title: string
+	created_at: string
+	metadata: CategoryMeta
 }
 
-export interface File {
-	home_screen: ImageSources
-	lock_screen: ImageSources
+export interface CategoryMeta {
+	banner: ImageSource | null
+	description: string
 }
 
-export interface ImageSources {
-	url: string
+export interface Screenshot {
+	screenshot: ImageSource
+}
+
+export interface ImageSource {
 	imgix_url: string
 }
 

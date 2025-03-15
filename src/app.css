@@ -77,12 +77,19 @@
 	themes: '';
 }
 
+[data-theme='light'] {
+	--muted: var(--color-zinc-700);
+}
+[data-theme='dark'] {
+	--muted: var(--color-zinc-500);
+}
+
 @theme {
 	--font-sans: 'Inter Variable', 'sans-serif';
 	--font-mono: 'IBM Plex Mono', 'monospace';
 	--font-serif: 'Prata', serif;
 
-	--color-muted: var(--color-zinc-500);
+	--color-muted: var(--muted);
 }
 
 /* EMBLA JS */

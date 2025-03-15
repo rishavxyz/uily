@@ -23,7 +23,9 @@
 <div class="container mx-auto">
 	<nav class="navbar">
 		<ul class="navbar-start ps-4">
-			<li><a href="/" class="card-title">Ui<span class="-ms-2 font-mono">.ly</span></a></li>
+			<li>
+				<a href="/" class="card-title text-[1.1rem]">Ui<span class="-ms-2 font-mono">.ly</span></a>
+			</li>
 		</ul>
 		<ul class="navbar-end">
 			<li>{@render themeForm()}</li>

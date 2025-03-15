@@ -5,18 +5,28 @@ import type { Result } from '$lib/types/result'
 import type { PageServerLoad } from './$types'
 
 const props = `{
-  title
-  created_at
-  metadata {
-	author {
-	  slug
-	  title
+	title
+	created_at
+	metadata {
+		slug
+		author {
+			slug
+			title
+		}
+		categories {
+			slug
+			title
+		}
+		screenshots {
+			screenshot {
+				imgix_url
+			}
+		}
+		dominant_color
+		steps_to_recreate
+		notes
+		likes_count
 	}
-    description
-	requirments
-	notes
-	files
-	likes
 }`
 
 export const load: PageServerLoad = async ({ params, locals }) => {
