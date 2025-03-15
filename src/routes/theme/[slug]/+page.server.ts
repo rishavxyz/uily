@@ -1,6 +1,6 @@
 // export const prerender = false
 
-import db, { objectKey } from '$lib/db'
+import db, { objectKey } from '$lib/server/db'
 import type { Result } from '$lib/types/result'
 import type { PageServerLoad } from './$types'
 

@@ -13,7 +13,7 @@
 
 	<section>
 		<h2 class="mb-3 font-serif text-xl font-medium">Recent Themes</h2>
-		<ul class="grid grid-cols-2 gap-5 md:grid-flow-col-dense">
+		<ul class="grid grid-cols-2 gap-5 md:grid-cols-3 lg:grid-cols-4">
 			{#each data.results as { created_at, slug, title, thumbnail, metadata } (slug)}
 				<li class="card card-sm bg-base-200 h-min shadow-sm md:max-w-2xs">
 					<a href="/theme/{slug}" class="rounded-box overflow-clip">
@@ -39,7 +39,7 @@
 						<ul class="card-actions">
 							{#each metadata.categories as category}
 								<li>
-									<a href="#/" class="badge badge-xs badge-accent">{category.title}</a>
+									<a href="#/" class="badge badge-sm badge-accent">{category.title}</a>
 								</li>
 							{/each}
 						</ul>

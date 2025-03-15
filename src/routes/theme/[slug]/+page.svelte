@@ -2,9 +2,7 @@
 	import { Carousel, CarouselContent, CarouselItem } from '$lib/components/carousel'
 	import { AspectRatio } from 'bits-ui'
 	import { EditIcon } from '@lucide/svelte'
-	import { Vibrant, WorkerPipeline } from 'node-vibrant/worker'
 	import moment from 'moment'
-	import Pipeline from 'node-vibrant/worker.worker?worker'
 	import type { Result } from '$lib/types/result.js'
 	import type { SystemTheme } from '$lib/types/theme'
 
@@ -13,51 +11,32 @@
 	}
 	let { data }: Props = $props()
 	const { result } = data
-	const lockScreen = result.metadata.screenshots[0]
+	const backgroundColor = result.metadata.dominant_color
 
 	let current = $state(0)
-	let backgroundColor = $state('transparent')
 	let imgLoaded = $state(false)
 
-	function extractColors(src: string) {
-		Vibrant.use(new WorkerPipeline(Pipeline as never))
-
-		const img = new Image()
-		img.src = src
-		img.crossOrigin = 'anonymous'
-		img.onload = async () => {
-			const builder = Vibrant.from(img)
-			const colors = await builder.getPalette()
-			backgroundColor = colors.DarkVibrant?.hex ?? 'transparent'
-			imgLoaded = true
-		}
-	}
-
-	$effect(() => {
-		extractColors(lockScreen.screenshot.imgix_url)
-	})
 	const date = moment(result.created_at).fromNow()
 </script>
 
-<main class="mx-auto flex flex-col justify-evenly gap-5 p-5 md:flex-row md:gap-20">
-	<div class="grid gap-5 md:max-w-xs">
+<main class="mx-auto flex flex-col items-start justify-evenly gap-5 p-5 md:flex-row md:gap-20">
+	<div class="w-full flex-1 justify-center space-y-5 md:grid">
 		<h1 class="card-title font-serif text-2xl">{result.title}</h1>
 
-		<Carousel currentSlide={(n) => (current = n)} class="-mx-3">
+		<Carousel currentSlide={(n) => (current = n)} class="-mx-3 md:mx-0 md:w-sm">
 			<CarouselContent>
 				{#each result.metadata.screenshots as { screenshot }, i (i)}
 					<CarouselItem class="card">
 						<div style="background-color:{backgroundColor};">
 							<AspectRatio.Root ratio={9 / 18}>
-								{#if imgLoaded}
-									<img
-										src={screenshot.imgix_url}
-										alt=""
-										loading="eager"
-										draggable="false"
-										class="size-full object-contain"
-									/>
-								{/if}
+								<img
+									src={screenshot.imgix_url}
+									alt=""
+									onload={() => (imgLoaded = true)}
+									loading="eager"
+									draggable="false"
+									class="size-full object-contain"
+								/>
 							</AspectRatio.Root>
 						</div>
 					</CarouselItem>
@@ -74,7 +53,7 @@
 		</Carousel>
 	</div>
 
-	<div class="grid max-w-xl flex-1 gap-5">
+	<div class="grid max-w-xl flex-1 gap-2">
 		<section class="space-y-1">
 			<div class="space-y-1">
 				<p class="font-medium tracking-wide">
@@ -83,7 +62,7 @@
 				<time class="text-muted text-sm" datetime={result.created_at}>Created {date}</time>
 			</div>
 
-			<ul class="mt-2 flex flex-wrap gap-3">
+			<ul class="flex flex-wrap gap-3">
 				{#each result.metadata.categories as category (category.slug)}
 					<li>
 						<a href="#/" class="badge badge-accent">{category.title}</a>
@@ -120,7 +99,7 @@
 {#if imgLoaded}
 	<div
 		id="gradient-bg"
-		class="absolute inset-0 bottom-20 isolate -z-2 transition-transform"
+		class="absolute inset-0 bottom-20 isolate -z-1 transition-transform"
 		style="
 		--color: {backgroundColor};
 		--opacity: {data.theme == 'dark' ? 62 : 28}%;
