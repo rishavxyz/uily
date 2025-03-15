@@ -13,7 +13,7 @@ export interface Metadata {
 	category: Category
 	files: File[]
 	likes: number
-	comment: string | null
+	notes: string | null
 	requirments: Requirment[]
 }
 

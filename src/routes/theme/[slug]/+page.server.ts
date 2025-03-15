@@ -14,12 +14,12 @@ const props = `{
 	}
     description
 	requirments
-	comment
+	notes
 	files
 	likes
 }`
 
-export const load: PageServerLoad = async ({ params }) => {
+export const load: PageServerLoad = async ({ params, locals }) => {
 	const { object } = await db.objects
 		.findOne({
 			type: objectKey,
@@ -29,6 +29,7 @@ export const load: PageServerLoad = async ({ params }) => {
 		.depth(1)
 
 	return {
-		result: object as Result
+		result: object as Result,
+		theme: locals.theme
 	}
 }

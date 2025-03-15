@@ -4,7 +4,7 @@
 @plugin "tailwindcss-animate";
 
 @plugin "daisyui/theme" {
-	name: 'bubblegum';
+	name: 'light';
 	default: true;
 	prefersdark: false;
 	color-scheme: 'light';
@@ -39,9 +39,9 @@
 }
 
 @plugin "daisyui/theme" {
-	name: 'bubblegum';
+	name: 'dark';
 	default: false;
-	prefersdark: true;
+	prefersdark: false;
 	color-scheme: 'dark';
 	--color-base-100: oklch(14% 0.004 49.25);
 	--color-base-200: oklch(17% 0 0);
@@ -74,7 +74,7 @@
 }
 
 @plugin "daisyui" {
-	themes: 'bubblegum';
+	themes: '';
 }
 
 @theme {

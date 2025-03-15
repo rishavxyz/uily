@@ -1,9 +1,14 @@
 // See https://svelte.dev/docs/kit/types#app.d.ts
+
+import type { SystemTheme } from '$lib/types/theme'
+
 // for information about these interfaces
 declare global {
 	namespace App {
 		// interface Error {}
-		// interface Locals {}
+		interface Locals {
+			theme: SystemTheme
+		}
 		// interface PageData {}
 		// interface PageState {}
 		// interface Platform {}
