@@ -21,7 +21,7 @@
 
 <main class="mx-auto flex flex-col items-start justify-evenly gap-5 p-5 md:flex-row md:gap-20">
 	<div class="w-full flex-1 justify-center space-y-5 md:grid">
-		<h1 class="card-title font-serif text-2xl">{result.title}</h1>
+		<h1 class="card-title font-serif text-2xl capitalize">{result.title}</h1>
 
 		<Carousel currentSlide={(n) => (current = n)} class="-mx-3 md:mx-0 md:w-sm">
 			<CarouselContent>
@@ -53,8 +53,8 @@
 		</Carousel>
 	</div>
 
-	<div class="grid max-w-xl flex-1 gap-2">
-		<section class="space-y-1">
+	<div class="grid max-w-xl flex-1 gap-5">
+		<section class="space-y-5">
 			<div class="space-y-1">
 				<p class="font-medium tracking-wide">
 					<a href="#/" class="link">{result.metadata.author.title}</a>
@@ -62,18 +62,25 @@
 				<time class="text-muted text-sm" datetime={result.created_at}>Created {date}</time>
 			</div>
 
-			<ul class="flex flex-wrap gap-3">
-				{#each result.metadata.categories as category (category.slug)}
-					<li>
-						<a href="#/" class="badge badge-accent">{category.title}</a>
-					</li>
-				{/each}
-			</ul>
+			<div class="space-y-3">
+				<p class="card-title font-serif">Dominant colors</p>
+				<ul class="card-actions">
+					{#each result.metadata.colors as color}
+						<li>
+							<a href="/colors/{color.slug}" class="badge badge-sm badge-accent link-hover">
+								<span class="rounded-box size-2.5" style="background-color:{color.metadata.color};"
+								></span>
+								<span>{color.title}</span>
+							</a>
+						</li>
+					{/each}
+				</ul>
+			</div>
 		</section>
 
 		{#if result.metadata.steps_to_recreate}
 			<section class="mt-4 space-y-4">
-				<p class="font-serif text-xl font-medium">Steps to Recreate</p>
+				<p class="card-title font-serif">Steps to Recreate</p>
 				{@render html(result.metadata.steps_to_recreate)}
 			</section>
 		{/if}
@@ -81,8 +88,8 @@
 		{#if result.metadata.notes}
 			<section class="card border-neutral bg-base-100 mt-4 max-w-lg border">
 				<div class="card-body">
-					<h2 class="flex gap-3 font-serif text-xl">
-						<EditIcon class="text-muted" />
+					<h2 class="card-title items-start font-serif">
+						<EditIcon class="opacity-90" />
 						Notes
 					</h2>
 					{@render html(result.metadata.notes)}

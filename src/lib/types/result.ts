@@ -10,12 +10,22 @@ export interface Result {
 export interface Metadata {
 	description: string | null
 	author: Author
-	categories: Category[]
+	tags: Tags[]
 	screenshots: Screenshot[]
 	likes_count: number
 	dominant_color: string
+	colors: Color[]
 	notes: string | null
 	steps_to_recreate: string | null
+}
+
+export interface Color {
+	id: string
+	slug: string
+	title: string
+	metadata: {
+		color: string
+	}
 }
 
 export interface Author {
@@ -31,15 +41,15 @@ export interface AuthorMetadata {
 	themes_created: number
 }
 
-export interface Category {
+export interface Tags {
 	id: string
 	slug: string
 	title: string
 	created_at: string
-	metadata: CategoryMeta
+	metadata: TagMetadata
 }
 
-export interface CategoryMeta {
+export interface TagMetadata {
 	banner: ImageSource | null
 	description: string
 }

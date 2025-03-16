@@ -13,6 +13,12 @@ const props = `{
 			title
 		}
 		dominant_color
+		colors {
+			id
+			title
+			slug
+			metadata
+		}
 	}
 }`
 
@@ -25,7 +31,7 @@ export const actions = {
 	}
 }
 
-export const load = async () => {
+export async function load() {
 	const { objects } = await db.objects
 		.find({
 			type: objectKey

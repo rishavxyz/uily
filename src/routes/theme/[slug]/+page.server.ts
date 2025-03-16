@@ -2,7 +2,6 @@
 
 import db, { objectKey } from '$lib/server/db'
 import type { Result } from '$lib/types/result'
-import type { PageServerLoad } from './$types'
 
 const props = `{
 	title
@@ -23,13 +22,14 @@ const props = `{
 			}
 		}
 		dominant_color
+		colors
 		steps_to_recreate
 		notes
 		likes_count
 	}
 }`
 
-export const load: PageServerLoad = async ({ params, locals }) => {
+export async function load({ params, locals }) {
 	const { object } = await db.objects
 		.findOne({
 			type: objectKey,

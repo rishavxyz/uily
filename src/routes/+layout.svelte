@@ -24,7 +24,9 @@
 	<nav class="navbar">
 		<ul class="navbar-start ps-4">
 			<li>
-				<a href="/" class="card-title text-[1.1rem]">Ui<span class="-ms-2 font-mono">.ly</span></a>
+				<a href="/" class="card-title text-[1.1rem]"
+					>Ui<span class="-ms-2 -mt-0.5 inline-block font-mono">.ly</span></a
+				>
 			</li>
 		</ul>
 		<ul class="navbar-end">
