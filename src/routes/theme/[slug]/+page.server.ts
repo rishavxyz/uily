@@ -5,6 +5,7 @@ import type { Result } from '$lib/types/result'
 
 const props = `{
 	title
+	slug
 	created_at
 	metadata {
 		slug

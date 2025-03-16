@@ -1,10 +1,11 @@
 <script lang="ts">
 	import { Carousel, CarouselContent, CarouselItem } from '$lib/components/carousel'
 	import { AspectRatio } from 'bits-ui'
-	import { EditIcon } from '@lucide/svelte'
+	import { ArrowLeftIcon, EditIcon } from '@lucide/svelte'
 	import moment from 'moment'
 	import type { Result } from '$lib/types/result.js'
 	import type { SystemTheme } from '$lib/types/theme'
+	import BadgeColor from '$lib/components/badge/badge-color.svelte'
 
 	type Props = {
 		data: { result: Result; theme: SystemTheme }
@@ -19,11 +20,18 @@
 	const date = moment(result.created_at).fromNow()
 </script>
 
+<header>
+	<a href="/" class="link-hover btn btn-outline mx-5 my-2">
+		<ArrowLeftIcon />
+		Back
+	</a>
+</header>
+
 <main class="mx-auto flex flex-col items-start justify-evenly gap-5 p-5 md:flex-row md:gap-20">
 	<div class="w-full flex-1 justify-center space-y-5 md:grid">
 		<h1 class="card-title font-serif text-2xl capitalize">{result.title}</h1>
 
-		<Carousel currentSlide={(n) => (current = n)} class="-mx-3 md:mx-0 md:w-sm">
+		<Carousel currentSlide={(n) => (current = n)} class="-mx-3 md:mx-0 md:w-sm" key={result.slug}>
 			<CarouselContent>
 				{#each result.metadata.screenshots as { screenshot }, i (i)}
 					<CarouselItem class="card">
@@ -65,13 +73,9 @@
 			<div class="space-y-3">
 				<p class="card-title font-serif">Dominant colors</p>
 				<ul class="card-actions">
-					{#each result.metadata.colors as color}
+					{#each result.metadata.colors as { slug, title, ...r } (slug)}
 						<li>
-							<a href="/colors/{color.slug}" class="badge badge-sm badge-accent link-hover">
-								<span class="rounded-box size-2.5" style="background-color:{color.metadata.color};"
-								></span>
-								<span>{color.title}</span>
-							</a>
+							<BadgeColor href="/colors/{slug}" color={r.metadata.color} {title} />
 						</li>
 					{/each}
 				</ul>
@@ -86,7 +90,7 @@
 		{/if}
 
 		{#if result.metadata.notes}
-			<section class="card border-neutral bg-base-100 mt-4 max-w-lg border">
+			<section class="card border-neutral bg-base-100 mt-4 border">
 				<div class="card-body">
 					<h2 class="card-title items-start font-serif">
 						<EditIcon class="opacity-90" />
@@ -96,6 +100,9 @@
 				</div>
 			</section>
 		{/if}
+		<footer>
+			<a href="/" class="link-hover btn btn-outline my-2 w-full"> Back to home </a>
+		</footer>
 	</div>
 </main>
 
@@ -106,10 +113,10 @@
 {#if imgLoaded}
 	<div
 		id="gradient-bg"
-		class="absolute inset-0 bottom-20 isolate -z-1 transition-transform"
+		class="absolute inset-0 isolate -z-2 h-screen transition-transform"
 		style="
 		--color: {backgroundColor};
-		--opacity: {data.theme == 'dark' ? 62 : 28}%;
+		--opacity: {data.theme == 'dark' ? 52 : 42}%;
 	"
 	></div>
 {/if}
@@ -118,10 +125,10 @@
 	#gradient-bg {
 		--from: color-mix(in oklab, var(--color) var(--opacity), transparent);
 		background-image: linear-gradient(180deg, var(--from), transparent);
-		filter: blur(12px);
+		/* filter: blur(12px); */
 		transform-origin: top;
 		transform: scaleY(0);
-		animation: reveal 3s cubic-bezier(0, 0.55, 0.45, 1) forwards;
+		animation: reveal 2s cubic-bezier(0.77, 0, 0.13, 1) forwards;
 		animation-delay: 0.7s;
 	}
 	@keyframes reveal {

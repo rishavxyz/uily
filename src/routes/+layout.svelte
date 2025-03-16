@@ -5,23 +5,33 @@
 	import '@fontsource/ibm-plex-mono'
 	import '../app.css'
 	import { MoonIcon, SunIcon } from '@lucide/svelte'
+	import { onNavigate } from '$app/navigation'
 	import { enhance } from '$app/forms'
 	import type { SubmitFunction } from './$types.js'
 	import type { SystemTheme } from '$lib/types/theme'
 
 	let { children, data } = $props()
 
-	const flex = 'flex items-center justify-between'
-
 	const setTheme: SubmitFunction = ({ action }) => {
 		let theme = action.searchParams.get('theme') as SystemTheme | null
 		theme = theme ?? 'light'
 		setTimeout(() => document.documentElement.setAttribute('data-theme', theme), 150)
 	}
+
+	onNavigate((navigation) => {
+		if (!document.startViewTransition) return
+
+		return new Promise((resolve) => {
+			document.startViewTransition(async () => {
+				resolve()
+				await navigation.complete
+			})
+		})
+	})
 </script>
 
 <div class="container mx-auto">
-	<nav class="navbar">
+	<nav class="navbar [view-transition-name:nav]">
 		<ul class="navbar-start ps-4">
 			<li>
 				<a href="/" class="card-title text-[1.1rem]"
@@ -47,3 +57,41 @@
 		</label>
 	</form>
 {/snippet}
+
+<style>
+	@keyframes fade-in {
+		from {
+			opacity: 0;
+		}
+	}
+
+	@keyframes fade-out {
+		to {
+			opacity: 0;
+		}
+	}
+
+	@keyframes slide-from-right {
+		from {
+			transform: translateX(30px);
+		}
+	}
+
+	@keyframes slide-to-left {
+		to {
+			transform: translateX(-30px);
+		}
+	}
+
+	:root::view-transition-old(root) {
+		animation:
+			90ms cubic-bezier(0.4, 0, 1, 1) both fade-out,
+			300ms cubic-bezier(0.4, 0, 0.2, 1) both slide-to-left;
+	}
+
+	:root::view-transition-new(root) {
+		animation:
+			210ms cubic-bezier(0, 0, 0.2, 1) 90ms both fade-in,
+			300ms cubic-bezier(0.4, 0, 0.2, 1) both slide-from-right;
+	}
+</style>
