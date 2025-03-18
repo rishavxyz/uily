@@ -24,7 +24,7 @@
 	}
 </script>
 
-<main class="space-y-5 p-5">
+<main class="mx-auto max-w-md space-y-5 p-5">
 	<h1 class="card-title font-serif text-2xl">All colors</h1>
 
 	<form action="" class="card card-border card-sm w-full md:w-sm">
@@ -40,7 +40,7 @@
 		</fieldset>
 	</form>
 
-	<ul class="flex min-h-10 flex-wrap gap-3">
+	<ul class="flex min-h-12 flex-wrap gap-3">
 		{#each data.allAvailableColors as { slug, title, metadata } (slug)}
 			{@const color = metadata.color}
 			<li>
