@@ -50,11 +50,15 @@ export async function load({ params, parent }) {
 		}
 	}
 
-	const result = await db.objects.find(query(ids)).props(props).depth(1)
+	try {
+		const result = await db.objects.find(query(ids)).props(props).depth(1)
 
-	return {
-		slug: params.slug,
-		colors,
-		results: result.objects as Result[]
+		return {
+			slug: params.slug,
+			colors,
+			results: result.objects || ([] as Result[])
+		}
+	} catch (e) {
+		console.log(`error`, e)
 	}
 }

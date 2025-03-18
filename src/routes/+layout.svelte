@@ -40,6 +40,10 @@
 			</li>
 		</ul>
 		<ul class="navbar-end">
+			<!-- TODO: Fix colors -->
+			<!-- <li>
+				<a href="/colors">Colors</a>
+			</li> -->
 			<li>{@render themeForm()}</li>
 		</ul>
 	</nav>
