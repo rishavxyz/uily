@@ -1,13 +1,34 @@
 <script lang="ts">
 	import BadgeColor from '$lib/components/badge/badge-color.svelte'
 	import Card from '$lib/components/card.svelte'
-	import { TriangleAlertIcon } from '@lucide/svelte'
+	import { ArrowLeftIcon, TriangleAlertIcon } from '@lucide/svelte'
 
 	let { data } = $props()
+
+	let colors = data.slug.split('-')
+	let str = $state('')
+
+	colors.forEach((color,i) => {
+		if (color.length == 0) return
+		if (i == colors.length - 2) {
+			str += color + ' & '
+		} else if (i == colors.length - 1) {
+			str += color
+		} else {
+			str += color + ', '
+		}
+	})
 </script>
 
+<header>
+	<a href="/colors" class="link-hover btn btn-outline mx-5 my-2">
+		<ArrowLeftIcon />
+		Back
+	</a>
+</header>
+
 <main class="p-5">
-	<h2 class="mb-3 font-serif text-xl font-medium capitalize">{data.slug} themes</h2>
+	<h2 class="mb-3 font-serif text-xl font-medium capitalize">{str} themes</h2>
 	<ul class="grid grid-cols-2 gap-5 md:grid-cols-3 lg:grid-cols-4">
 		{#each data.results as { created_at, slug, title, thumbnail, metadata } (slug)}
 			<li>
@@ -22,10 +43,11 @@
 							{#each metadata.colors as { slug, title, ...r } (slug)}
 								<li>
 									<BadgeColor
-										href={slug != data.slug ? `/colors/${slug}` : undefined}
-										class={slug == data.slug && 'badge-primary font-bold'}
-										color={r.metadata.color}
+										href="/colors/{slug}"
+										class={[colors.includes(slug) && 'badge-neutral badge-soft font-medium']}
+										{...r}
 										{title}
+										color={r.metadata.color}
 									/>
 								</li>
 							{/each}

@@ -32,14 +32,10 @@ export async function load({ params, parent }) {
 	const ids: string[] = []
 	const { allAvailableColors } = await parent()
 
-	if (colors.length == 1) {
-		for (const { slug, id } of allAvailableColors) {
-			if (slug == colors[0]) {
-				ids.push(id)
-			}
+	for (const { slug, id } of allAvailableColors) {
+		if (colors.includes(slug)) {
+			ids.push(id)
 		}
-	} else {
-		// TODO: implementation needed
 	}
 
 	if (ids.length == 0) {
@@ -59,6 +55,11 @@ export async function load({ params, parent }) {
 			results: result.objects || ([] as Result[])
 		}
 	} catch (e) {
+		return {
+			slug: params.slug,
+			colors: [],
+			results: [] as Result[]
+		}
 		console.log(`error`, e)
 	}
 }

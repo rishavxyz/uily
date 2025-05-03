@@ -1,8 +1,8 @@
 <script lang="ts">
-	import { pushState } from '$app/navigation'
+	import { goto, pushState } from '$app/navigation'
 	import BadgeColor from '$lib/components/badge/badge-color.svelte'
 	import { cn } from '$lib/utils'
-	import { fly, slide } from 'svelte/transition'
+	import { fade, slide } from 'svelte/transition'
 
 	type V = { color: string; href: string | undefined; title: string }
 
@@ -50,9 +50,10 @@
 					href={!checked ? `/colors/${slug}` : undefined}
 					class={cn(
 						{ 'btn btn-xs btn-ghost h-auto font-normal': checked },
-						{ 'badge-neutral': colors.find((v) => v.color == color) }
+						{ 'badge-neutral badge-soft': colors.find((v) => v.color == color) }
 					)}
 					onclick={handleClick}
+					disabled={colors.length >= 5 && !colors.find((v) => v.color == color)}
 				/>
 			</li>
 		{:else}
@@ -63,19 +64,21 @@
 	{#if checked}
 		{@const color = colors.map((c) => c.color).join(',')}
 		<section class="card card-border overflow-clip shadow-sm" transition:slide>
+			{#if colors.length>0}
 			<figure
-				class="aspect-video h-20 blur-md transition-all"
+				class="aspect-video h-20 blur-md transition-all will-change-colors"
 				style={'background-blend-mode: multiply, screen;' +
 					(colors.length == 1
 						? `background-color: ${colors[0].color};`
 						: `background-image: linear-gradient(135deg, ${color});`)}
 			></figure>
+			{:else}
+				<div class="aspect-video h-20 grid place-items-center" in:fade>
+					<span>Add colors to see the result</span>
+				</div>
+			{/if}
 			<footer class="card-body">
-				<ul class="flex w-full gap-1 text-xs">
-					{#each colors as color}
-						<li>{color}</li>
-					{/each}
-				</ul>
+				<button class="mt-3 btn btn-primary" disabled={!colors.length} onclick={() => goto('/colors/'+newUrl)}>Search colors</button>
 			</footer>
 		</section>
 	{/if}
